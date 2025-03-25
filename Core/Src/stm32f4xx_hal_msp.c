@@ -57,9 +57,7 @@
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
-
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-                    /**
+/**
   * Initializes the Global MSP.
   */
 void HAL_MspInit(void)
@@ -98,20 +96,13 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     __HAL_RCC_ADC1_CLK_ENABLE();
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_GPIOC_CLK_ENABLE();
     /**ADC1 GPIO Configuration
-    PA3     ------> ADC1_IN3
-    PC5     ------> ADC1_IN15
+    PA7     ------> ADC1_IN7
     */
-    GPIO_InitStruct.Pin = PT2_ADC_Pin;
+    GPIO_InitStruct.Pin = GPIO_PIN_7;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(PT2_ADC_GPIO_Port, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = PT1_ADC_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(PT1_ADC_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* USER CODE BEGIN ADC1_MspInit 1 */
 
@@ -137,12 +128,9 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
     __HAL_RCC_ADC1_CLK_DISABLE();
 
     /**ADC1 GPIO Configuration
-    PA3     ------> ADC1_IN3
-    PC5     ------> ADC1_IN15
+    PA7     ------> ADC1_IN7
     */
-    HAL_GPIO_DeInit(PT2_ADC_GPIO_Port, PT2_ADC_Pin);
-
-    HAL_GPIO_DeInit(PT1_ADC_GPIO_Port, PT1_ADC_Pin);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_7);
 
   /* USER CODE BEGIN ADC1_MspDeInit 1 */
 
@@ -324,32 +312,6 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 
 }
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if(htim->Instance==TIM8)
-  {
-  /* USER CODE BEGIN TIM8_MspPostInit 0 */
-
-  /* USER CODE END TIM8_MspPostInit 0 */
-
-    __HAL_RCC_GPIOC_CLK_ENABLE();
-    /**TIM8 GPIO Configuration
-    PC9     ------> TIM8_CH4
-    */
-    GPIO_InitStruct.Pin = SERVO_TIMER_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    GPIO_InitStruct.Alternate = GPIO_AF3_TIM8;
-    HAL_GPIO_Init(SERVO_TIMER_GPIO_Port, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN TIM8_MspPostInit 1 */
-
-  /* USER CODE END TIM8_MspPostInit 1 */
-  }
-
-}
 /**
 * @brief TIM_Base MSP De-Initialization
 * This function freeze the hardware resources used in this example
