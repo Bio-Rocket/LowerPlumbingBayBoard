@@ -56,6 +56,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern UART_HandleTypeDef huart3;
 extern TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN EV */
@@ -189,16 +190,17 @@ void USART1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles UART5 global interrupt.
+  * @brief This function handles USART3 global interrupt.
   */
-void UART5_IRQHandler(void)
+void USART3_IRQHandler(void)
 {
-  /* USER CODE BEGIN UART5_IRQn 0 */
-  cpp_USART5_IRQHandler();
-  /* USER CODE END UART5_IRQn 0 */
-  /* USER CODE BEGIN UART5_IRQn 1 */
+  /* USER CODE BEGIN USART3_IRQn 0 */
 
-  /* USER CODE END UART5_IRQn 1 */
+  /* USER CODE END USART3_IRQn 0 */
+  HAL_UART_IRQHandler(&huart3);
+  /* USER CODE BEGIN USART3_IRQn 1 */
+
+  /* USER CODE END USART3_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

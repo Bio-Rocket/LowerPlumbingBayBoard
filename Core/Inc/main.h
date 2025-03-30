@@ -69,20 +69,22 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define TC1_CS__Pin GPIO_PIN_15
-#define TC1_CS__GPIO_Port GPIOB
+#define PT19_Pin GPIO_PIN_2
+#define PT19_GPIO_Port GPIOA
+#define TC12_CS__Pin GPIO_PIN_7
+#define TC12_CS__GPIO_Port GPIOA
+#define PT18_Pin GPIO_PIN_5
+#define PT18_GPIO_Port GPIOC
+#define DEBUG_TX_Pin GPIO_PIN_10
+#define DEBUG_TX_GPIO_Port GPIOB
+#define DEBUG_RX_Pin GPIO_PIN_11
+#define DEBUG_RX_GPIO_Port GPIOB
+#define TC11_CS__Pin GPIO_PIN_15
+#define TC11_CS__GPIO_Port GPIOB
 #define CONDUIT_TX_Pin GPIO_PIN_9
 #define CONDUIT_TX_GPIO_Port GPIOA
 #define CONDUIT_RX_Pin GPIO_PIN_10
 #define CONDUIT_RX_GPIO_Port GPIOA
-#define TC2_SPI_SCK_Pin GPIO_PIN_10
-#define TC2_SPI_SCK_GPIO_Port GPIOC
-#define DEBUG_TX_Pin GPIO_PIN_12
-#define DEBUG_TX_GPIO_Port GPIOC
-#define DEBUG_RX_Pin GPIO_PIN_2
-#define DEBUG_RX_GPIO_Port GPIOD
-#define TC2_CS__Pin GPIO_PIN_4
-#define TC2_CS__GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

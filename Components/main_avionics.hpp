@@ -31,22 +31,15 @@ namespace Global
 /* This should be the only place externs are allowed -------------------------------*/
 
 //ADC Handles
-extern ADC_HandleTypeDef hadc1;      // ADC1 - Pressure Transducer ADC
-
-//I2C Handles
-//extern I2C_HandleTypeDef hi2c1;      // I2C1 -- EEPROM (? - Do we still have an I2C EEPROM)
+extern ADC_HandleTypeDef hadc1;      // ADC1 - Pressure Transducer 19 ADC
+extern ADC_HandleTypeDef hadc2;      // ADC2 - Pressure Transducer 18 ADC
 
 //SPI Handles
-extern SPI_HandleTypeDef hspi2;		 // SPI2 - Thermocouple 1 MISO/CLK
-extern SPI_HandleTypeDef hspi3;		 // SPI3 - Thermocouple 2 MISO/CLK
+extern SPI_HandleTypeDef hspi1;		 // SPI1 - Thermocouple 12 MISO/CLK
+extern SPI_HandleTypeDef hspi2;		 // SPI2 - Thermocouple 11 MISO/CLK
 
 //CRC Handles
 extern CRC_HandleTypeDef hcrc;       // CRC - Hardware CRC System Handle
-
-//DMA Handles
-extern DMA_HandleTypeDef hdma_uart4_rx; // DMA UART 4 RX -
-extern DMA_HandleTypeDef hdma_uart5_rx; // DMA UART 5 RX -
-extern DMA_HandleTypeDef hdma_uart5_tx; // DMA UART 5 TX -
 
 //Timer Handles
 extern TIM_HandleTypeDef htim8; // TIM 8
@@ -55,15 +48,13 @@ extern TIM_HandleTypeDef htim8; // TIM 8
 namespace SystemHandles {
     // Aliases
 
-	constexpr ADC_HandleTypeDef* ADC_Pressure_Transducer = &hadc1;
+	constexpr ADC_HandleTypeDef* ADC_Pressure_Transducer_19 = &hadc1;
+	constexpr ADC_HandleTypeDef* ADC_Pressure_Transducer_28 = &hadc2;
 
-	constexpr SPI_HandleTypeDef* SPI_Thermocouple1 = &hspi2;
-	constexpr SPI_HandleTypeDef* SPI_Thermocouple2 = &hspi3;
+	constexpr SPI_HandleTypeDef* SPI_Thermocouple12 = &hspi1;
+	constexpr SPI_HandleTypeDef* SPI_Thermocouple11 = &hspi2;
 
     constexpr CRC_HandleTypeDef* CRC_Handle = &hcrc;
-
-    // DMA Aliases
-
 }
 
 #endif /* AVIONICS_INCLUDE_SOAR_MAIN_H */
