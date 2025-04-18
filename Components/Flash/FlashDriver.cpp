@@ -10,33 +10,26 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define PT18_SECTOR  FLASH_SECTOR_5
-#define PT19_SECTOR  FLASH_SECTOR_6
-#define TC11_SECTOR  FLASH_SECTOR_7
-#define TC12_SECTOR  FLASH_SECTOR_8
-
-#define PT18_ADDR    ADDR_FLASH_SECTOR_5
-#define PT19_ADDR    ADDR_FLASH_SECTOR_6
-#define TC11_ADDR    ADDR_FLASH_SECTOR_7
-#define TC12_ADDR    ADDR_FLASH_SECTOR_8
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
 /* Private functions ---------------------------------------------------------*/
-HAL_StatusTypeDef Flash_Write(uint32_t address, uint32_t* data, uint32_t length)
-{
-  HAL_FLASH_Unlock();
+HAL_StatusTypeDef Flash_Write(uint32_t* next_addr, uint32_t sector_end, uint16_t data) {
 
-  for (uint32_t i = 0; i < length; i++) {
-    if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address + (i * 4), data[i]) != HAL_OK) {
-      HAL_FLASH_Lock();
-      return HAL_ERROR;
+    if (*next_addr >= sector_end) {
+        return HAL_ERROR;
     }
-  }
 
-  HAL_FLASH_Lock();
-  return HAL_OK;
+    HAL_FLASH_Unlock();
+    HAL_StatusTypeDef status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, *next_addr, data);
+    HAL_FLASH_Lock();
+
+    if (status == HAL_OK) {
+        *next_addr += 2;
+    }
+
+    return status;
 }
 
 HAL_StatusTypeDef Flash_Erase(uint32_t sector)
