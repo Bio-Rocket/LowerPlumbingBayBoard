@@ -69,8 +69,6 @@ constexpr uint8_t TELEMETRY_TASK_RTOS_PRIORITY = 2;			// Priority of the baromet
 constexpr uint8_t TELEMETRY_TASK_QUEUE_DEPTH_OBJS = 10;		// Size of the barometer task queue
 constexpr uint16_t TELEMETRY_TASK_STACK_DEPTH_WORDS = 512;		// Size of the barometer task stack
 
-
-
 /* System Defines ------------------------------------------------------------------*/
 /* - Each define / constexpr must have a comment explaining what it is used for     */
 /* - Each define / constexpr must be all-caps. Prefer constexpr unless it's a string, or a calculation (eg. mathematical expression being more readable) */

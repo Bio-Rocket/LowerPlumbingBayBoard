@@ -17,7 +17,6 @@
 #include "GPIO.hpp"
 #include "stm32f4xx_hal.h"
 #include "ThermocoupleTask.hpp"
-#include "MEV.hpp"
 
 /* Macros --------------------------------------------------------------------*/
 
@@ -107,12 +106,6 @@ void DebugTask::HandleDebugMessage(const char* msg)
 		SOAR_PRINT("Lowest Ever Heap Size\t: %d Bytes\n", xPortGetMinimumEverFreeHeapSize());
 		SOAR_PRINT("Debug Task Runtime  \t: %d ms\n\n", TICKS_TO_MS(xTaskGetTickCount()));
 	}
-	else if (strcmp(msg, "blinkled") == 0) {
-		// Print message
-		SOAR_PRINT("Debug 'LED blink' command requested\n");
-		GPIO::LED1::On();
-		// TODO: Send to HID task to blink LED, this shouldn't delay
-	}
 	else if (strcmp(msg, "ptc") == 0) {
 		// Print message
 		SOAR_PRINT("Debug 'Pressure Transducer' Sample and Output Received\n");
@@ -125,12 +118,6 @@ void DebugTask::HandleDebugMessage(const char* msg)
 		SOAR_PRINT("Debug 'Thermocouple' Sampling Temperature Reading");
 		ThermocoupleTask::Inst().SendCommand(Command(REQUEST_COMMAND, THERMOCOUPLE_REQUEST_NEW_SAMPLE ));
 		ThermocoupleTask::Inst().SendCommand(Command(REQUEST_COMMAND, THERMOCOUPLE_REQUEST_DEBUG ));
-	}
-	else if (strcmp(msg, "openMEV") == 0) {
-		MEV::OpenMEV();
-	}
-	else if (strcmp(msg, "closeMEV") == 0) {
-		MEV::CloseMEV();
 	}
 	else {
 		// Single character command, or unknown command

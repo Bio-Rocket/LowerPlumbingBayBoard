@@ -8,7 +8,6 @@
 
 #include "FlightTask.hpp"
 #include "ReadBufferFixedSize.h"
-#include "MEV.hpp"
 #include "GPIO.hpp"
 #include "FastLogManager.hpp"
 
@@ -61,12 +60,6 @@ void PBBProtocolTask::HandleProtobufCommandMessage(EmbeddedProto::ReadBufferFixe
     // Process the db command
     switch (msg.get_pbb_command().get_command_enum())
     {
-    case Proto::PbbCommand::Command::PBB_OPEN_MEV:
-        //MEV::OpenMEV();
-        break;
-    case Proto::PbbCommand::Command::PBB_CLOSE_MEV:
-        //MEV::CloseMEV();
-        break;
     default:
         break;
     }

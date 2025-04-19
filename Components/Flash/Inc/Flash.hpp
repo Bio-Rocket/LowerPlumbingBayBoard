@@ -38,5 +38,6 @@
 HAL_StatusTypeDef Flash_Write(uint32_t* next_addr, uint32_t sector_end, uint16_t data);
 HAL_StatusTypeDef Flash_Erase(uint32_t sector);
 void Flash_Erase_AllUserSectors(void);
+void Flash_Offload(uint32_t sector_start, uint32_t sector_end);
 
 #endif /* FLASH_HPP_ */
