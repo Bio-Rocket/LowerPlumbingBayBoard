@@ -11,5 +11,5 @@
 void run_interface();
 
 void cpp_USART1_IRQHandler();
-void cpp_USART5_IRQHandler();
+void cpp_USART3_IRQHandler();
 #endif /* C__IFACE_HPP_ */

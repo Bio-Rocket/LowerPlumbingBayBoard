@@ -13,6 +13,7 @@
 #include "DebugTask.hpp"
 #include "Task.hpp"
 #include "main.h"
+#include "Flash.hpp"
 
 /* Constructor ------------------------------------------------------------------*/
 FastLogManager::FastLogManager()
@@ -58,8 +59,8 @@ void FastLogManager::TransmitLogData(PressureLog& pl, uint32_t timestamp) {
 	msg.set_target(Proto::Node::NODE_DMB);
 	Proto::PressureLog plg;
 	plg.set_time(timestamp);
-	plg.set_ib_pressure(pl.ibPressure);
-    plg.set_pv_pressure(pl.pvPressure);
+	plg.set_ib_pressure(pl.pt18Pressure);
+    plg.set_pv_pressure(pl.pt19Pressure);
     msg.set_pressureLog(plg);
 	EmbeddedProto::WriteBufferFixedSize<DEFAULT_PROTOCOL_WRITE_BUFFER_SIZE> writeBuffer;
 	msg.serialize(writeBuffer);
@@ -95,6 +96,9 @@ void FastLogManager::Run() {
             break;
         case START:
             SamplePressureTransducer();
+
+            Flash_Write(&next_addr_pt18, PT18_END_ADDR, data.pt18Pressure);
+            Flash_Write(&next_addr_pt19, PT19_END_ADDR, data.pt19Pressure);
 
             // If the tick is greater than the AUTO_PT_SLOW_PERIOD, transmit the data
             if (++msTick > AUTO_PT_SLOW_PERIOD) {
@@ -175,11 +179,12 @@ void ADC_Select_CH15 (void)
  */
 void FastLogManager::SamplePressureTransducer()
 {
+    // TODO: Update for new PTs
 	static const int PT_VOLTAGE_ADC_POLL_TIMEOUT = 50;
 	static const double PRESSURE_SCALE = 1.5220883534136546; // Value to scale to original voltage value
 	double adcVal[2] = {};
-	double pressureTransducerValue1 = 0;
-	double pressureTransducerValue2 = 0;
+	int16_t pressureTransducerValue1 = 0;
+	int16_t pressureTransducerValue2 = 0;
 	double vi = 0;
 
 	/* Functions -----------------------------------------------------------------*/
@@ -197,10 +202,10 @@ void FastLogManager::SamplePressureTransducer()
 			}
 	vi = ((3.3/4095) * (adcVal[0])); // Converts 12 bit ADC value into voltage
 	pressureTransducerValue1 = (250 * (vi * PRESSURE_SCALE) - 125) * 1000; // Multiply by 1000 to keep decimal places
-	data.ibPressure = (int32_t) pressureTransducerValue1; // Pressure in PSI
+	data.pt18Pressure = pressureTransducerValue1; // Pressure in PSI
 	vi = ((3.3/4095) * (adcVal[1])); // Converts 12 bit ADC value into voltage
 		pressureTransducerValue2 = (250 * (vi * PRESSURE_SCALE) - 125) * 1000; // Multiply by 1000 to keep decimal places
-		data.pvPressure = (int32_t) pressureTransducerValue2; // Pressure in PSI
+		data.pt19Pressure = pressureTransducerValue2; // Pressure in PSI
 }
 
 /**
@@ -212,8 +217,8 @@ void FastLogManager::TransmitProtocolPressureData()
 	msg.set_source(Proto::Node::NODE_PBB);
 	msg.set_target(Proto::Node::NODE_DMB);
 	Proto::PbbPressure pressData;
-	pressData.set_ib_pressure(data.ibPressure);
-	pressData.set_lower_pv_pressure(data.pvPressure);
+	pressData.set_ib_pressure(data.pt18Pressure);
+	pressData.set_lower_pv_pressure(data.pt19Pressure);
 	msg.set_pbbPressure(pressData);
 
 	EmbeddedProto::WriteBufferFixedSize<DEFAULT_PROTOCOL_WRITE_BUFFER_SIZE> writeBuffer;
