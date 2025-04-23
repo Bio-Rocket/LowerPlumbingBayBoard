@@ -112,7 +112,6 @@ void DebugTask::HandleDebugMessage(const char* msg)
 		SOAR_PRINT("Debug 'Pressure Transducer' Sample and Output Received\n");
 		PressureTransducerTask::Inst().SendCommand(Command(REQUEST_COMMAND, PT_REQUEST_NEW_SAMPLE));
 		PressureTransducerTask::Inst().SendCommand(Command(REQUEST_COMMAND, PT_REQUEST_DEBUG));
-		// TODO: Send to HID task to blink LED, this shouldn't delay
 	}
 	else if (strcmp(msg, "tct") == 0)
 	{

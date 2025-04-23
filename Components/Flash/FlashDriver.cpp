@@ -16,20 +16,20 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Private functions ---------------------------------------------------------*/
-HAL_StatusTypeDef Flash_Write(uint32_t* next_addr, uint32_t sector_end, uint16_t data) {
+HAL_StatusTypeDef Flash_Write(uint32_t next_addr, uint32_t sector_end, uint16_t data) {
 
     // If address is within sector
-    if (*next_addr >= sector_end) {
+    if (next_addr >= sector_end) {
         return HAL_ERROR;
     }
 
     HAL_FLASH_Unlock();
-    HAL_StatusTypeDef status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, *next_addr, data);
+    HAL_StatusTypeDef status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, next_addr, data);
     HAL_FLASH_Lock();
 
     // Increment the address by 2 bytes (halfword)
     if (status == HAL_OK) {
-        *next_addr += 2;
+        next_addr += 2;
     }
 
     return status;

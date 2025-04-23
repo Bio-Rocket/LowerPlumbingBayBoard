@@ -97,8 +97,8 @@ void FastLogManager::Run() {
         case START:
             SamplePressureTransducer();
 
-            Flash_Write(&next_addr_pt18, PT18_END_ADDR, data.pt18Pressure);
-            Flash_Write(&next_addr_pt19, PT19_END_ADDR, data.pt19Pressure);
+            Flash_Write(next_addr_pt18, PT18_END_ADDR, data.pt18Pressure);
+            Flash_Write(next_addr_pt19, PT19_END_ADDR, data.pt19Pressure);
 
             // If the tick is greater than the AUTO_PT_SLOW_PERIOD, transmit the data
             if (++msTick > AUTO_PT_SLOW_PERIOD) {
