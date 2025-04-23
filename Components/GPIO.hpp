@@ -15,27 +15,4 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 
-namespace GPIO
-{
-//TODO: Deal with these!
-	namespace LED1
-	{
-		inline void On() { }
-		inline void Off() { }
-		inline void Toggle() { }
-
-		inline bool IsOn() { return false; }
-	}
-
-	namespace LED2
-	{
-		inline void On() { }
-		inline void Off() { }
-		inline void Toggle() { }
-
-		inline bool IsOn() { return false; }
-	}
-	
-}
-
 #endif /* AVIONICS_INCLUDE_SOAR_CORE_GPIO_H */
