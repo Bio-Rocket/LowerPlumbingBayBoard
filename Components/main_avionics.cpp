@@ -22,15 +22,24 @@
 #include "TelemetryTask.hpp"
 #include "ThermocoupleTask.hpp"
 #include "PBBProtocolTask.hpp"
+#include "TestTask.hpp"
+#include "FlashSectorManager.hpp"
 
 /* Global Variables ------------------------------------------------------------------*/
 Mutex Global::vaListMutex;
+FlashDriver* gFlashDriver = nullptr;
+FlashSectorManager* gFlashManager = nullptr;
  
 /* Interface Functions ------------------------------------------------------------*/
 /**
  * @brief Main function interface, called inside main.cpp before os initialization takes place.
 */
 void run_main() {
+
+	static FlashDriver flashDriver(128 * 1024); // Should make this dynamic
+	static FlashSectorManager flashManager(&flashDriver);
+	gFlashDriver = &flashDriver;
+	gFlashManager = &flashManager;
 
 	// Init Tasks
 	FlightTask::Inst().InitTask();
@@ -40,6 +49,7 @@ void run_main() {
 	PBBProtocolTask::Inst().InitTask();
 	TelemetryTask::Inst().InitTask();
 	ThermocoupleTask::Inst().InitTask();
+	TestSensorTask::Inst().InitTask();
 
 	// Print System Boot Info : Warning, don't queue more than 10 prints before scheduler starts
 	SOAR_PRINT("\n-- AVIONICS CORE --\n");

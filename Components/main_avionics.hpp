@@ -9,6 +9,8 @@
 #define AVIONICS_INCLUDE_SOAR_MAIN_H
 #include "Mutex.hpp"
 #include "stm32f4xx_hal.h"
+#include "FlashDriver.hpp"
+#include "FlashSectorManager.hpp"
 
 /* Interface Functions ------------------------------------------------------------------*/
 /* These functions act as our program's 'main' and any functions inside CubeIDE's main --*/
@@ -44,6 +46,8 @@ extern CRC_HandleTypeDef hcrc;       // CRC - Hardware CRC System Handle
 //Timer Handles
 extern TIM_HandleTypeDef htim8; // TIM 8
 
+extern FlashDriver* gFlashDriver;
+extern FlashSectorManager* gFlashManager;
 
 namespace SystemHandles {
     // Aliases

@@ -5,39 +5,24 @@
  *      Author: jessegerbrandt
  */
 
-#ifndef FLASH_HPP_
-#define FLASH_HPP_
+#ifndef FLASH_HPP
+#define FLASH_HPP
 
+#include <cstdint>
 #include "stm32f4xx_hal.h"
 
-#define PT18_SECTOR  FLASH_SECTOR_5
-#define PT19_SECTOR  FLASH_SECTOR_6
-#define TC11_SECTOR  FLASH_SECTOR_7
-#define TC12_SECTOR  FLASH_SECTOR_8
+class Flash
+{
+public:
+    virtual ~Flash() = default;
+    virtual bool Erase(uint32_t offset) = 0;
+    virtual bool Write(uint32_t offset, uint8_t* data, uint32_t len) = 0;
+    virtual bool Read(uint32_t offset, uint8_t* data, uint32_t len) = 0;
+    virtual bool EraseChip() = 0;
 
-#define PT18_ADDR    ADDR_FLASH_SECTOR_5
-#define PT19_ADDR    ADDR_FLASH_SECTOR_6
-#define TC11_ADDR    ADDR_FLASH_SECTOR_7
-#define TC12_ADDR    ADDR_FLASH_SECTOR_8
+    virtual uint32_t GetSectorSize() const = 0;
+    virtual uint32_t GetNumSectors() const = 0;
+    virtual uint32_t GetBaseAddr() const = 0;
+};
 
-#define PT18_END_ADDR    END_ADDR_FLASH_SECTOR_5
-#define PT19_END_ADDR    END_ADDR_FLASH_SECTOR_6
-#define TC11_END_ADDR    END_ADDR_FLASH_SECTOR_7
-#define TC12_END_ADDR    END_ADDR_FLASH_SECTOR_8
-
-#define ADDR_FLASH_SECTOR_5     ((uint32_t)0x08020000)
-#define ADDR_FLASH_SECTOR_6     ((uint32_t)0x08040000)
-#define ADDR_FLASH_SECTOR_7     ((uint32_t)0x08060000)
-#define ADDR_FLASH_SECTOR_8     ((uint32_t)0x08080000)
-
-#define END_ADDR_FLASH_SECTOR_5     ((uint32_t)0x0803FFFF)
-#define END_ADDR_FLASH_SECTOR_6     ((uint32_t)0x0805FFFF)
-#define END_ADDR_FLASH_SECTOR_7     ((uint32_t)0x0807FFFF)
-#define END_ADDR_FLASH_SECTOR_8     ((uint32_t)0x0809FFFF)
-
-HAL_StatusTypeDef Flash_Write(uint32_t next_addr, uint32_t sector_end, uint16_t data);
-HAL_StatusTypeDef Flash_Erase(uint32_t sector);
-void Flash_Erase_All_User_Sectors(void);
-void Flash_Offload(uint32_t sector_start, uint32_t sector_end);
-
-#endif /* FLASH_HPP_ */
+#endif // FLASH_HPP

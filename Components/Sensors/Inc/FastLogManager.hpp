@@ -47,13 +47,14 @@ public:
     // Get the data
     PressureLog GetLastLog() { return data; }
     void PrintLastLog() {
-        SOAR_PRINT("|PT| PV Pressure [1] (PSI): %d.%d\r\n", data.pt18Pressure / 1000, data.pt18Pressure % 1000);
-        SOAR_PRINT("|PT| IB Pressure [2] (PSI): %d.%d\r\n", data.pt19Pressure / 1000, data.pt19Pressure % 1000);
+        SOAR_PRINT("|PT| PV Pressure [1] (PSI): %d.%01d\r\n", data.pt18Pressure / 10, abs(data.pt18Pressure % 10));
+        SOAR_PRINT("|PT| IB Pressure [2] (PSI): %d.%01d\r\n", data.pt19Pressure / 10, abs(data.pt19Pressure % 10));
+
     }
 
 private:
-    uint32_t next_addr_pt18 = PT18_ADDR;
-    uint32_t next_addr_pt19 = PT19_ADDR;
+//    uint32_t next_addr_pt18 = PT18_ADDR;
+//    uint32_t next_addr_pt19 = PT19_ADDR;
     FastLogManager();
 
     enum State {

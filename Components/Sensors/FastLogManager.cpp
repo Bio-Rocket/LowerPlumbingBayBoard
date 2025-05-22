@@ -97,8 +97,8 @@ void FastLogManager::Run() {
         case START:
             SamplePressureTransducer();
 
-            Flash_Write(next_addr_pt18, PT18_END_ADDR, data.pt18Pressure);
-            Flash_Write(next_addr_pt19, PT19_END_ADDR, data.pt19Pressure);
+//            Flash_Write(next_addr_pt18, PT18_END_ADDR, data.pt18Pressure);
+//            Flash_Write(next_addr_pt19, PT19_END_ADDR, data.pt19Pressure);
 
             // If the tick is greater than the AUTO_PT_SLOW_PERIOD, transmit the data
             if (++msTick > AUTO_PT_SLOW_PERIOD) {
@@ -144,12 +144,12 @@ void FastLogManager::Run() {
 
 /* Pressure Transducer Readers ------------------------------------------------------------------*/
 
-void ADC_Select_CH3 (void)
+void ADC_Select_CH2 (void)
 {
 	ADC_ChannelConfTypeDef sConfig = {0};
 	  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
 	  */
-	  sConfig.Channel = ADC_CHANNEL_3;
+	  sConfig.Channel = ADC_CHANNEL_2;
 	  sConfig.Rank = 1;
 	  sConfig.SamplingTime = ADC_SAMPLETIME_28CYCLES;
 	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -166,46 +166,41 @@ void ADC_Select_CH15 (void)
 	  sConfig.Channel = ADC_CHANNEL_15;
 	  sConfig.Rank = 1;
 	  sConfig.SamplingTime = ADC_SAMPLETIME_28CYCLES;
-	  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+	  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
 	  {
 	    Error_Handler();
 	  }
 }
 
-
-/**
- * @brief This function reads and updates pressure readings
- *          from the pressure transducer.
- */
 void FastLogManager::SamplePressureTransducer()
 {
-    // TODO: Update for new PTs
-	static const int PT_VOLTAGE_ADC_POLL_TIMEOUT = 50;
-	static const double PRESSURE_SCALE = 1.5220883534136546; // Value to scale to original voltage value
-	double adcVal[2] = {};
-	int16_t pressureTransducerValue1 = 0;
-	int16_t pressureTransducerValue2 = 0;
-	double vi = 0;
+    static const int PT_VOLTAGE_ADC_POLL_TIMEOUT = 50;
+    static const float ADC_TO_PRESSURE_SCALE = 0.4871f; // psi per ADC count
+    static const float PRESSURE_OFFSET = -362.5f;       // psi offset
 
-	/* Functions -----------------------------------------------------------------*/
-	ADC_Select_CH3();
-	HAL_ADC_Start(&hadc1);  // Enables ADC and starts conversion of regular channels
-	if(HAL_ADC_PollForConversion(&hadc1, PT_VOLTAGE_ADC_POLL_TIMEOUT) == HAL_OK) { //Check if conversion is completed
-		adcVal[0] = HAL_ADC_GetValue(&hadc1); // Get ADC Value
-		HAL_ADC_Stop(&hadc1);
-		}
-	ADC_Select_CH15();
-		HAL_ADC_Start(&hadc1);  // Enables ADC and starts conversion of regular channels
-		if(HAL_ADC_PollForConversion(&hadc1, PT_VOLTAGE_ADC_POLL_TIMEOUT) == HAL_OK) { //Check if conversion is completed
-			adcVal[1] = HAL_ADC_GetValue(&hadc1); // Get ADC Value
-			HAL_ADC_Stop(&hadc1);
-			}
-	vi = ((3.3/4095) * (adcVal[0])); // Converts 12 bit ADC value into voltage
-	pressureTransducerValue1 = (250 * (vi * PRESSURE_SCALE) - 125) * 1000; // Multiply by 1000 to keep decimal places
-	data.pt18Pressure = pressureTransducerValue1; // Pressure in PSI
-	vi = ((3.3/4095) * (adcVal[1])); // Converts 12 bit ADC value into voltage
-		pressureTransducerValue2 = (250 * (vi * PRESSURE_SCALE) - 125) * 1000; // Multiply by 1000 to keep decimal places
-		data.pt19Pressure = pressureTransducerValue2; // Pressure in PSI
+    uint32_t adcVal[2] = {0};
+
+    ADC_Select_CH2();
+    HAL_ADC_Start(&hadc1);
+    if (HAL_ADC_PollForConversion(&hadc1, PT_VOLTAGE_ADC_POLL_TIMEOUT) == HAL_OK) {
+        adcVal[0] = HAL_ADC_GetValue(&hadc1);
+    }
+    HAL_ADC_Stop(&hadc1);
+
+    ADC_Select_CH15();
+    HAL_ADC_Start(&hadc2);
+    if (HAL_ADC_PollForConversion(&hadc2, PT_VOLTAGE_ADC_POLL_TIMEOUT) == HAL_OK) {
+        adcVal[1] = HAL_ADC_GetValue(&hadc2);
+    }
+    HAL_ADC_Stop(&hadc2);
+
+    /* Calculate pressures */
+    float pressure_psi_19 = adcVal[0] * ADC_TO_PRESSURE_SCALE + PRESSURE_OFFSET;
+    float pressure_psi_18 = adcVal[1] * ADC_TO_PRESSURE_SCALE + PRESSURE_OFFSET;
+
+    /* Store as PSI * 10 (for 1 decimal place) */
+    data.pt18Pressure = (int16_t)((pressure_psi_18 * 10.0f) + 0.5f);
+    data.pt19Pressure = (int16_t)((pressure_psi_19 * 10.0f) + 0.5f);
 }
 
 /**

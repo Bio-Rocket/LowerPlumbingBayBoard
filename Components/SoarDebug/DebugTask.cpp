@@ -18,6 +18,7 @@
 #include "stm32f4xx_hal.h"
 #include "ThermocoupleTask.hpp"
 #include "Flash.hpp"
+#include "TestTask.hpp"
 
 /* Macros --------------------------------------------------------------------*/
 
@@ -110,7 +111,7 @@ void DebugTask::HandleDebugMessage(const char* msg)
 	else if (strcmp(msg, "ptc") == 0) {
 		// Print message
 		SOAR_PRINT("Debug 'Pressure Transducer' Sample and Output Received\n");
-		PressureTransducerTask::Inst().SendCommand(Command(REQUEST_COMMAND, PT_REQUEST_NEW_SAMPLE));
+		//PressureTransducerTask::Inst().SendCommand(Command(REQUEST_COMMAND, PT_REQUEST_NEW_SAMPLE));
 		PressureTransducerTask::Inst().SendCommand(Command(REQUEST_COMMAND, PT_REQUEST_DEBUG));
 	}
 	else if (strcmp(msg, "tct") == 0)
@@ -119,42 +120,58 @@ void DebugTask::HandleDebugMessage(const char* msg)
 		ThermocoupleTask::Inst().SendCommand(Command(REQUEST_COMMAND, THERMOCOUPLE_REQUEST_NEW_SAMPLE ));
 		ThermocoupleTask::Inst().SendCommand(Command(REQUEST_COMMAND, THERMOCOUPLE_REQUEST_DEBUG ));
 	}
-	else if (strcmp(msg, "eraseall") == 0) {
-	    SOAR_PRINT("Erasing all sectors");
-	    Flash_Erase_All_User_Sectors();
+	else if (strcmp(msg, "erase") == 0) {
+		SOAR_PRINT("Testing erase command\n");
+		TestSensorTask::Inst().SendCommand(Command(DATA_COMMAND, TEST_SENSOR_CMD_ERASE));
 	}
-    else if (strcmp(msg, "erasept18") == 0) {
-        SOAR_PRINT("Erasing sector 5 (PT18)");
-        Flash_Erase(PT18_SECTOR);
-    }
-    else if (strcmp(msg, "erasept19") == 0) {
-        SOAR_PRINT("Erasing sector 6 (PT19)");
-        Flash_Erase(PT19_SECTOR);
-    }
-    else if (strcmp(msg, "erasetc11") == 0) {
-        SOAR_PRINT("Erasing sector 7 (TC11)");
-        Flash_Erase(TC11_SECTOR);
-    }
-    else if (strcmp(msg, "erasetc12") == 0) {
-        SOAR_PRINT("Erasing sector 8 (TC12)");
-        Flash_Erase(TC12_SECTOR);
-    }
-    else if (strcmp(msg, "readpt18") == 0) {
-        SOAR_PRINT("Reading sector 5 (PT18)");
-        Flash_Offload(PT18_ADDR, PT18_END_ADDR);
-    }
-    else if (strcmp(msg, "readpt19") == 0) {
-        SOAR_PRINT("Reading sector 6 (PT19)");
-        Flash_Offload(PT19_ADDR, PT19_END_ADDR);
-    }
-    else if (strcmp(msg, "readtc11") == 0) {
-        SOAR_PRINT("Reading sector 7 (TC11)");
-        Flash_Offload(TC11_ADDR, TC11_END_ADDR);
-    }
-    else if (strcmp(msg, "readtc12") == 0) {
-        SOAR_PRINT("Reading sector 8 (TC12)");
-        Flash_Offload(TC12_ADDR, TC12_END_ADDR);
-    }
+	else if (strcmp(msg, "write") == 0) {
+		SOAR_PRINT("Testing write command\n");
+		TestSensorTask::Inst().SendCommand(Command(DATA_COMMAND, TEST_SENSOR_CMD_WRITE));
+	}
+	else if (strcmp(msg, "dump") == 0) {
+		SOAR_PRINT("Testing dump command\n");
+		TestSensorTask::Inst().SendCommand(Command(DATA_COMMAND, TEST_SENSOR_CMD_DUMP));
+	}
+	else if (strcmp(msg, "burst") == 0) {
+		SOAR_PRINT("Testing burst command\n");
+		TestSensorTask::Inst().SendCommand(Command(DATA_COMMAND, TEST_SENSOR_CMD_WRITE_BURST));
+	}
+//	else if (strcmp(msg, "eraseall") == 0) {
+//	    SOAR_PRINT("Erasing all sectors");
+//	    Flash_Erase_All_User_Sectors();
+//	}
+//    else if (strcmp(msg, "erasept18") == 0) {
+//        SOAR_PRINT("Erasing sector 5 (PT18)");
+//        Flash_Erase(PT18_SECTOR);
+//    }
+//    else if (strcmp(msg, "erasept19") == 0) {
+//        SOAR_PRINT("Erasing sector 6 (PT19)");
+//        Flash_Erase(PT19_SECTOR);
+//    }
+//    else if (strcmp(msg, "erasetc11") == 0) {
+//        SOAR_PRINT("Erasing sector 7 (TC11)");
+//        Flash_Erase(TC11_SECTOR);
+//    }
+//    else if (strcmp(msg, "erasetc12") == 0) {
+//        SOAR_PRINT("Erasing sector 8 (TC12)");
+//        Flash_Erase(TC12_SECTOR);
+//    }
+//    else if (strcmp(msg, "readpt18") == 0) {
+//        SOAR_PRINT("Reading sector 5 (PT18)");
+//        Flash_Offload(PT18_ADDR, PT18_END_ADDR);
+//    }
+//    else if (strcmp(msg, "readpt19") == 0) {
+//        SOAR_PRINT("Reading sector 6 (PT19)");
+//        Flash_Offload(PT19_ADDR, PT19_END_ADDR);
+//    }
+//    else if (strcmp(msg, "readtc11") == 0) {
+//        SOAR_PRINT("Reading sector 7 (TC11)");
+//        Flash_Offload(TC11_ADDR, TC11_END_ADDR);
+//    }
+//    else if (strcmp(msg, "readtc12") == 0) {
+//        SOAR_PRINT("Reading sector 8 (TC12)");
+//        Flash_Offload(TC12_ADDR, TC12_END_ADDR);
+//    }
 
 	else {
 		// Single character command, or unknown command
