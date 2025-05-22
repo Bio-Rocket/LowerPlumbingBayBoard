@@ -19,13 +19,13 @@ class UARTDriver;
 
 namespace Driver {
 	extern UARTDriver uart1;
-	extern UARTDriver uart5;
+	extern UARTDriver uart3;
 }
 
 /* UART Driver Aliases ------------------------------------------------------------------*/
 namespace UART {
 	constexpr UARTDriver* Conduit_DMB = &Driver::uart1;
-	constexpr UARTDriver* Debug = &Driver::uart5;
+	constexpr UARTDriver* Debug = &Driver::uart3;
 }
 
 /* UART Receiver Base Class ------------------------------------------------------------------*/

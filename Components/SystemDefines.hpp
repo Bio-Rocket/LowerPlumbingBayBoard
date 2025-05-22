@@ -59,6 +59,10 @@ constexpr uint8_t TASK_PRESSURE_TRANSDUCER_PRIORITY = 3;			// Priority of the pr
 constexpr uint8_t TASK_PRESSURE_TRANSDUCER_QUEUE_DEPTH_OBJS = 10;		// Size of the pressure transducer task queue
 constexpr uint16_t TASK_PRESSURE_TRANSDUCER_STACK_DEPTH_WORDS = 768;		// Size of the pressure transducer task stack
 
+constexpr uint8_t TASK_TEST_PRIORITY = 3;            // Priority of the pressure transducer task
+constexpr uint8_t TASK_TEST_QUEUE_DEPTH_OBJS = 10;       // Size of the pressure transducer task queue
+constexpr uint16_t TASK_TEST_STACK_DEPTH_WORDS = 768;        // Size of the pressure transducer task stack
+
 // THERMOCOUPLE TASK
 constexpr uint8_t TASK_THERMOCOUPLE_PRIORITY = 2;			// Priority of the thermocouple task
 constexpr uint8_t TASK_THERMOCOUPLE_QUEUE_DEPTH_OBJS = 10;		// Size of the thermocouple task queue
@@ -68,8 +72,6 @@ constexpr uint16_t TASK_THERMOCOUPLE_STACK_DEPTH_WORDS = 768;		// Size of the th
 constexpr uint8_t TELEMETRY_TASK_RTOS_PRIORITY = 2;			// Priority of the barometer task
 constexpr uint8_t TELEMETRY_TASK_QUEUE_DEPTH_OBJS = 10;		// Size of the barometer task queue
 constexpr uint16_t TELEMETRY_TASK_STACK_DEPTH_WORDS = 512;		// Size of the barometer task stack
-
-
 
 /* System Defines ------------------------------------------------------------------*/
 /* - Each define / constexpr must have a comment explaining what it is used for     */

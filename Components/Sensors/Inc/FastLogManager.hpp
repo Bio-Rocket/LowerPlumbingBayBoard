@@ -12,19 +12,20 @@
 #include <etl/circular_buffer.h>
 #include <FreeRTOS.h>
 #include "SystemDefines.hpp"
-
+#include "Flash.hpp"
 
 /* Macros/Enums ------------------------------------------------------------*/
-constexpr uint16_t PT_SLOW_RATE = 4; // 4 Hz
+constexpr uint16_t PT_SLOW_RATE = 5; // 5 Hz
 constexpr uint16_t LOG_BUFFER_SIZE = 10000; // 10000 samples (10s at 1kHz)
-constexpr uint16_t SEND_RATE = 125; // 125 Hz
+constexpr uint16_t SEND_RATE = 100; // 100 Hz
 
 constexpr uint16_t AUTO_PT_SLOW_PERIOD = 1000 / PT_SLOW_RATE;
 constexpr uint16_t AUTO_PT_SEND_PERIOD = 1000 / SEND_RATE;
+
 /* Structs ------------------------------------------------------------------*/
 struct PressureLog {
-    int32_t pvPressure;
-    int32_t ibPressure;
+    int16_t pt18Pressure;
+    int16_t pt19Pressure;
 };
 
 /* Class ------------------------------------------------------------------*/
@@ -46,11 +47,14 @@ public:
     // Get the data
     PressureLog GetLastLog() { return data; }
     void PrintLastLog() {
-        SOAR_PRINT("|PT| PV Pressure [1] (PSI): %d.%d\r\n", data.pvPressure / 1000, data.pvPressure % 1000);
-        SOAR_PRINT("|PT| IB Pressure [2] (PSI): %d.%d\r\n", data.ibPressure / 1000, data.ibPressure % 1000);
+        SOAR_PRINT("|PT| PV Pressure [1] (PSI): %d.%01d\r\n", data.pt18Pressure / 10, abs(data.pt18Pressure % 10));
+        SOAR_PRINT("|PT| IB Pressure [2] (PSI): %d.%01d\r\n", data.pt19Pressure / 10, abs(data.pt19Pressure % 10));
+
     }
 
 private:
+//    uint32_t next_addr_pt18 = PT18_ADDR;
+//    uint32_t next_addr_pt19 = PT19_ADDR;
     FastLogManager();
 
     enum State {
@@ -80,6 +84,5 @@ protected:
     uint32_t sendIdx;
     PressureLog data;
 };
-
 
 #endif // SOAR_SENSOR_THERMOCOUPLE_TASK_HPP_

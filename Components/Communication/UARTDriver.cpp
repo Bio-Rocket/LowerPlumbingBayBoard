@@ -18,7 +18,7 @@
 // Declare the global UART driver objects
 namespace Driver {
     UARTDriver uart1(USART1);
-	UARTDriver uart5(UART5);
+	UARTDriver uart3(USART3);
 }
 
 /**
